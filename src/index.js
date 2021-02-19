@@ -1,70 +1,50 @@
-import './styles.css';
-import refs from './js/refs';
-import fetchArticles from './js/fetch-articles';
-import articlesMarkup from './js/articles-markup';
+// import refs from './js/refs';
+import countriesTpl from './templates/countries.hbs';
+import countryInformation from './templates/countryInformation.hbs';
+import debounce from 'lodash.debounce';
+import './js/notifications';
 
-let inputValue = '';
-let page = 1;
+const inputEl = document.querySelector('.input');
+const countriesListEl = document.querySelector('.js-countries');
 
-refs.searchForm.addEventListener('submit', event => {
-  event.preventDefault();
+inputEl.addEventListener(
+  'input',
+  debounce(event => {
+    event.preventDefault();
+    // console.log(event.target.value); // одно и
+    // console.log(inputEl.value);  // то же
 
-  const form = event.currentTarget;
-  inputValue = form.elements.query.value;
-  //   console.log(event.currentTarget);
+    inputEl.textContent = inputEl.value;
+    const countryName = inputEl.textContent;
+    // console.log(countryName);
 
-  refs.articlesContainer.innerHTML = '';
-  form.reset(); //чтобы поле ввода очищалось после нажатия на кнопку отправить
+    const url = `https://restcountries.eu/rest/v2/name/${countryName}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.length === 1) {
+          oneCountryMarkup(data);
+        }
+        if (data.length >= 2 && data.length <= 10) {
+          countriesMarkup(data); // потому что data у нас - это уже массив объектов.
+        }
+        if (data.length > 10) {
+          alert('Too many matches found. Please enter a more specific query');
+        }
+        inputEl.value = '';
+        console.log(data.length);
+      })
+      .catch(error => console.log(error));
 
-  page = 1;
-  fetchArticles(inputValue, page).then(articles => {
-    // здесь фц articlesMarkup ждет в аргументы articles, а фц fetchArticles как раз их возвращает;
-    articlesMarkup(articles);
-    page += 1;
-  });
-});
+    countriesListEl.innerHTML = '';
+  }, 500),
+);
 
-refs.loadMoreBtn.addEventListener('click', () => {
-  fetchArticles(inputValue, page).then(articles => {
-    articlesMarkup(articles);
-    page += 1;
-  });
-});
-
-// *************************************************************************
-// const options = {method: 'GET', headers: {Accept: 'application/json'}};
-// fetch('http://hn.algolia.com/api/v1/search?query=html')
-// .then(response => response.json())
-// .then(data => console.log(data))
-// ##########################################################################
-// const refs = {
-//   articlesContainer: document.querySelector('.js-articles'),
-//   searchForm: document.querySelector('.js-search-form'),
-// };
-
-// refs.searchForm.addEventListener('submit', event => {
-//   event.preventDefault();
-//   console.log(event.currentTarget);
-
-//   const form = event.currentTarget;
-//   const inputValue = form.elements.query.value;
-
-//   const apiKey = '272d456906a246f8b1eb5465a97fb0c7';
-//   const url = `http://newsapi.org/v2/everything?q=${inputValue}&language=en`;
-//   const options = {
-//     headers: {
-//       Authorization: apiKey,
-//     },
-//   };
-
-//   refs.articlesContainer.innerHTML = '';
-
-//   fetch(url, options)
-//     .then(response => response.json())
-//     .then(({ articles }) => {
-//       console.log(articles);
-//       const markup = articlesTpl(articles);
-//       refs.articlesContainer.insertAdjacentHTML('beforeend', markup);
-//     })
-//     .catch(error => console.log(error));
-// });
+function countriesMarkup(name) {
+  const markup = countriesTpl(name);
+  countriesListEl.insertAdjacentHTML('beforeend', markup);
+}
+function oneCountryMarkup(name) {
+  const markup = countryInformation(name);
+  countriesListEl.insertAdjacentHTML('beforeend', markup);
+}

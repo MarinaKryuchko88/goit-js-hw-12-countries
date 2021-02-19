@@ -1,7 +1,7 @@
-const refs = {
-  articlesContainer: document.querySelector('.js-articles'),
-  searchForm: document.querySelector('.js-search-form'),
-  loadMoreBtn: document.querySelector('[data-action="load-more"]'),
-};
+const inputEl = document.querySelector('input');
+console.log(inputEl);
 
-export default refs;
+const countriesListEl = document.querySelector('js-countries');
+console.log(countriesListEl);
+
+export default inputEl;

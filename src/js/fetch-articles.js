@@ -1,19 +1,20 @@
 // import articlesMarkup from './articles-markup';
 
 function fetchArticles(queryParameter, page) {
-  const apiKey = '272d456906a246f8b1eb5465a97fb0c7';
-  const url = `http://newsapi.org/v2/everything?q=${queryParameter}&pageSize=10&page=${page}`;
-  const options = {
-    headers: {
-      Authorization: apiKey,
-    },
-  };
+  // const apiKey = '272d456906a246f8b1eb5465a97fb0c7';
+
+  const url = `https://restcountries.eu/rest/v2/name/${query}`;
+  // const options = {
+  //   headers: {
+  //     Authorization: apiKey,
+  //   },
+  // };
 
   // поставив return, возвращаем из этой функции promise с data.articles, тогда в месте ее вызова можем сделать then;
   return (
-    fetch(url, options)
+    fetch(url)
       .then(response => response.json())
-      .then(data => data.articles) // здесь принимает от бэкэнда не все св-ва, а только articles, т.е. [{},{},...{}];
+      .then(data => console.log(data)) // здесь принимает от бэкэнда не все св-ва, а только articles, т.е. [{},{},...{}];
       // .then(({ articles }) => {    //здесь деструктуризировали св-во articles из {}, кот. пришел от бэкэнда;
       //   articlesMarkup(articles);
       // })
