@@ -1,7 +1,7 @@
-const inputEl = document.querySelector('input');
-console.log(inputEl);
+const inputEl = document.querySelector('.input');
+const countriesListEl = document.querySelector('.js-countries');
 
-const countriesListEl = document.querySelector('js-countries');
-console.log(countriesListEl);
+// inputEl.textContent = inputEl.value;
+// const countryName = inputEl.textContent;
 
-export default inputEl;
+export { inputEl, countriesListEl };

@@ -1,29 +1,16 @@
-// import articlesMarkup from './articles-markup';
+import { inputEl, countriesListEl } from './refs';
 
-function fetchArticles(queryParameter, page) {
-  // const apiKey = '272d456906a246f8b1eb5465a97fb0c7';
+inputEl.textContent = inputEl.value;
+const countryName = inputEl.textContent;
 
-  const url = `https://restcountries.eu/rest/v2/name/${query}`;
-  // const options = {
-  //   headers: {
-  //     Authorization: apiKey,
-  //   },
-  // };
+function fetchCountries(countryName) {
+  const url = `https://restcountries.eu/rest/v2/name/${countryName}`;
 
   // поставив return, возвращаем из этой функции promise с data.articles, тогда в месте ее вызова можем сделать then;
-  return (
-    fetch(url)
-      .then(response => response.json())
-      .then(data => console.log(data)) // здесь принимает от бэкэнда не все св-ва, а только articles, т.е. [{},{},...{}];
-      // .then(({ articles }) => {    //здесь деструктуризировали св-во articles из {}, кот. пришел от бэкэнда;
-      //   articlesMarkup(articles);
-      // })
-      .catch(error => console.log(error))
-  );
+  return fetch(url)
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => console.log(error));
 }
 
-export default fetchArticles;
-
-// эта функция делает только 1-но действие: отправляет запрос и получает ответ.
-// а дальше то, что мы будем делать с этим ответом, это уже другая фукция.
-// в данной задаче мы эти данные рендерим в браузер с помощью шаблона.
+export default fetchCountries;
